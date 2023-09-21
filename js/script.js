@@ -27,11 +27,9 @@ lista_productos[2] = new productoEstetica('Aceite para masajes neutra', 1500, 5)
 lista_productos[3] = new productoEstetica('Locion anticeptica', 1000, 5);
 
 let mensaje = `
-      Presione 0 si desea abandonar esta pantalla
-      Lista de productos a comprar:
-            1. ${lista_productos[1].nombre} - $${lista_productos[1].precio}
-            2. ${lista_productos[2].nombre} - $${lista_productos[2].precio}
-            3. ${lista_productos[3].nombre} - $${lista_productos[3].precio}
+            <div nombre="${lista_productos[1].nombre}" precio="${lista_productos[1].precio}">  ${lista_productos[1].nombre} - $${lista_productos[1].precio} <input type="button" class="anadir_carro" value="Añadir"> </div>
+            <div nombre="${lista_productos[2].nombre}" precio="${lista_productos[2].precio}">  ${lista_productos[2].nombre} - $${lista_productos[2].precio} <input type="button" class="anadir_carro" value="Añadir">  </div>
+            <div nombre="${lista_productos[3].nombre}" precio="${lista_productos[3].precio}">  ${lista_productos[3].nombre} - $${lista_productos[3].precio} <input type="button" class="anadir_carro" value="Añadir">  </div>
 `;
 
 let compra = parseInt(prompt(mensaje));
@@ -43,8 +41,6 @@ while(compra != 0){
       compra = parseInt(prompt(mensaje));
 }
 
-alert('Final del programa');
-console.log('-------------------------------------------');
 
 let txt_productos_comprados = '';
 let precio_total = 0;
@@ -62,11 +58,27 @@ let recibo = `
       Total a pagar: $${precio_total}         
 `;
 
-console.log(recibo);
 
 
 
 
+let parrafo_lista = document.getElementById("lista_productos");
+parrafo_lista.innerHTML = mensaje;
+
+
+let carro_productos = document.getElementById("carro_productos");
+
+
+let btn_anadir = parrafo_lista.querySelectorAll(".anadir_carro");
+btn_anadir.addEventListener("", );
+
+btn_anadir.forEach(btn => {
+      btn.addEventListener("click", function (){
+            
+      })
+      btn.parentNode.getAttribute("nombre");
+      btn.parentNode.getAttribute("precio");
+});
 
 
 

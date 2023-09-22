@@ -28,15 +28,15 @@ class productoEstetica{
 }
 
 let lista_productos = []; //listado de productos a mostrar
-let productos_carro = []; // productos en localStorage
+localStorage.setItem("productos_en_carro", ""); // productos en localStorage
 
-lista_productos.push(new productoEstetica(1, 'Crema para masajes neutra', 2000, 5)); //creacion de cada producto
-lista_productos.push(new productoEstetica(2, 'Aceite para masajes neutra', 1500, 5)); //creacion de cada producto
-lista_productos.push(new productoEstetica(3, 'Locion anticeptica', 1000, 5)); //creacion de cada producto
+lista_productos.push(new productoEstetica(0, 'Crema para masajes neutra', 2000, 5)); //creacion de cada producto
+lista_productos.push(new productoEstetica(1, 'Aceite para masajes neutra', 1500, 5)); //creacion de cada producto
+lista_productos.push(new productoEstetica(2, 'Locion anticeptica', 1000, 5)); //creacion de cada producto
 
 let mensaje = "";
 for (let producto of lista_productos) {
-      mensaje += "<div id="${producto.id}">  ${producto.nombre} - $${producto.precio} <input type="button" class="anadir_carro" value="Añadir"> </div> <br>"
+      mensaje += `<div idproducto="${producto.id}">  ${producto.nombre} - $${producto.precio} <input type="button" class="anadir_carro" value="Añadir"> </div> <br>`;
 }
 
 let parrafo_lista = document.getElementById("lista_productos");
@@ -48,19 +48,25 @@ parrafo_lista.innerHTML = mensaje; //se muestra la lista de producto en el html 
 
 let btn_anadir = parrafo_lista.querySelectorAll(".anadir_carro");
 btn_anadir.forEach(btn => { // cada vez que se añade un producto se lo añade al array productos_carro
-      btn.addEventListener("click", function (){
+      btn.addEventListener("click", function (e){
 
             let productos_carro_json = localStorage.getItem("productos_en_carro");// traigo del local sotage el arr.json
-            productos_carro = JSON.parse(productos_carro_json); //convierto a arr el .json
+            if (productos_carro_json) {
+                  productos_carro = JSON.parse(productos_carro_json); //convierto a arr el .json
+            }else{
+                  productos_carro = [];
+            }            
 
-            idproducto = btn.parentNode.getAttribute("id");
+            idproducto = e.target.parentNode.getAttribute("idproducto");
             if (lista_productos[idproducto].verificarInventario(1)) {
+                  console.log(productos_carro);
                   productos_carro.push(idproducto);
 
                   productos_carro_json = JSON.stringify(productos_carro); // convierto a json el arr
                   localStorage.setItem("productos_en_carro", productos_carro_json); // guardo en el localStorage al arr
 
                   alert("producto añadido al carrito con exito");
+                  actualizarCarro(lista_productos);
             }else{
                   alert("sin inventario del producto seleccionado");
             }
@@ -74,31 +80,39 @@ function actualizarCarro(lista) {
       let html = "";
 
       for (let producto of productos_carro) {
-            html += "<div id="${lista[producto].id}">  ${lista[producto].nombre} - $${lista[producto].precio} <input type="button" class="eliminar_de_carro" value="Eliminar"> </div> <br>";
+            html += `<div idproducto="${lista[producto].id}">  ${lista[producto].nombre} - $${lista[producto].precio} <input type="button" class="eliminar_de_carro" value="Eliminar"> </div> <br>`;
       }
       
       let div_carro_productos = document.getElementById("carro_productos");
       div_carro_productos.innerHTML = html;
 
       let btn_eliminar = div_carro_productos.querySelectorAll(".eliminar_de_carro");
-// hasta aca
-      btn_eliminar.forEach(btn => { // cada vez que se añade un producto se lo añade al array productos_carro
-            btn.addEventListener("click", function (){
+
+      btn_eliminar.forEach(btn => { // cada vez que se elimina un producto se lo elimina del local storage
+            btn.addEventListener("click", function (e){
       
                   let productos_carro_json = localStorage.getItem("productos_en_carro");// traigo del local sotage el arr.json
                   productos_carro = JSON.parse(productos_carro_json); //convierto a arr el .json
       
-                  idproducto = btn.parentNode.getAttribute("id");
-                  if (lista_productos[idproducto].verificarInventario(1)) {
-                        productos_carro.push(idproducto);
-      
-                        productos_carro_json = JSON.stringify(productos_carro); // convierto a json el arr
-                        localStorage.setItem("productos_en_carro", productos_carro_json); // guardo en el localStorage al arr
-      
-                        alert("producto añadido al carrito con exito");
+                  idproducto = e.target.parentNode.getAttribute("idproducto");
+
+                  let status = productos_carro.indexOf(idproducto);
+                  if(status != -1){
+                        alert("en breve se elimina el producto");
+                        if(productos_carro.splice(status, 1)){
+                              console.log(productos_carro);
+                              productos_carro_json = JSON.stringify(productos_carro); // convierto a json el arr
+                              
+                              localStorage.setItem("productos_en_carro", productos_carro_json);// guardo el json
+
+                              alert("producto eliminado del carrito");
+                        }else{
+                              alert("no se pudo eliminar el producto del carrito");
+                        }
+                        
                   }else{
-                        alert("sin inventario del producto seleccionado");
-                  }
+                        alert("el producto no existe en el carrito");
+                  }                  
             })      
       });
 }
@@ -106,5 +120,5 @@ function actualizarCarro(lista) {
 
 
 
-//localStorage.removeItem("nombre_dato"); remover localStorage -------------------------
+
 

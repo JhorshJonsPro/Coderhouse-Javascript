@@ -95,7 +95,6 @@ function actualizarCarro(lista) {
                   productos_carro = JSON.parse(productos_carro_json); //convierto a arr el .json
       
                   idproducto = e.target.parentNode.getAttribute("idproducto");
-
                   let status = productos_carro.indexOf(idproducto);
                   if(status != -1){
                         alert("en breve se elimina el producto");
@@ -106,6 +105,7 @@ function actualizarCarro(lista) {
                               localStorage.setItem("productos_en_carro", productos_carro_json);// guardo el json
 
                               alert("producto eliminado del carrito");
+                              e.target.parentNode.parentNode.removeChild(e.target.parentNode);
                         }else{
                               alert("no se pudo eliminar el producto del carrito");
                         }

@@ -47,9 +47,6 @@ parrafo_lista.innerHTML = mensaje; //se muestra la lista de producto en el html 
 
 
 let btn_anadir = parrafo_lista.querySelectorAll(".anadir_carro");
-btn_anadir.addEventListener("", );
-
-
 btn_anadir.forEach(btn => { // cada vez que se añade un producto se lo añade al array productos_carro
       btn.addEventListener("click", function (){
 
@@ -70,9 +67,41 @@ btn_anadir.forEach(btn => { // cada vez que se añade un producto se lo añade a
       })      
 });
 
+function actualizarCarro(lista) {
+      let productos_carro_json = localStorage.getItem("productos_en_carro");// traigo del local sotage el arr.json
+      productos_carro = JSON.parse(productos_carro_json); //convierto a arr el .json
 
-let carro_productos = document.getElementById("carro_productos");
+      let html = "";
 
+      for (let producto of productos_carro) {
+            html += "<div id="${lista[producto].id}">  ${lista[producto].nombre} - $${lista[producto].precio} <input type="button" class="eliminar_de_carro" value="Eliminar"> </div> <br>";
+      }
+      
+      let div_carro_productos = document.getElementById("carro_productos");
+      div_carro_productos.innerHTML = html;
+
+      let btn_eliminar = div_carro_productos.querySelectorAll(".eliminar_de_carro");
+// hasta aca
+      btn_eliminar.forEach(btn => { // cada vez que se añade un producto se lo añade al array productos_carro
+            btn.addEventListener("click", function (){
+      
+                  let productos_carro_json = localStorage.getItem("productos_en_carro");// traigo del local sotage el arr.json
+                  productos_carro = JSON.parse(productos_carro_json); //convierto a arr el .json
+      
+                  idproducto = btn.parentNode.getAttribute("id");
+                  if (lista_productos[idproducto].verificarInventario(1)) {
+                        productos_carro.push(idproducto);
+      
+                        productos_carro_json = JSON.stringify(productos_carro); // convierto a json el arr
+                        localStorage.setItem("productos_en_carro", productos_carro_json); // guardo en el localStorage al arr
+      
+                        alert("producto añadido al carrito con exito");
+                  }else{
+                        alert("sin inventario del producto seleccionado");
+                  }
+            })      
+      });
+}
 
 
 

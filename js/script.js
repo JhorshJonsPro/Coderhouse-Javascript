@@ -1,85 +1,81 @@
 class productoEstetica{
-      constructor(nombre, precio, inventario){
+      constructor(id, nombre, precio, inventario){
+            this.id = id;
 		this.nombre = nombre.toUpperCase();
 		this.precio = parseInt(precio);
             this.inventario = parseInt(inventario);
 	}
-      comprado(){
-            if (this.inventario > 0) {
-                  this.inventario--;
-                  console.log('Compra realizada');
-                  console.log('-------------------------------------------');
+
+      verificarInventario(cantidad){
+            let inventario = this.inventario;
+            let resultado = inventario - cantidad;
+            if (resultado >= 0) {
                   return true
             } else {
-                  console.log('compra denegada por falta de inventaio');
-                  console.log('-------------------------------------------');
+                  return false
+            }
+      }
+
+      compraCarrito(cantidad){
+            if (this.inventario > 0) {
+                  this.inventario -= cantidad;
+                  return true
+            } else {
                   return false
             }
             
       }
 }
 
-let lista_productos = [];
-let productos_comprados = [];
+let lista_productos = []; //listado de productos a mostrar
+let productos_carro = []; // productos en localStorage
 
-lista_productos[1] = new productoEstetica('Crema para masajes neutra', 2000, 5);
-lista_productos[2] = new productoEstetica('Aceite para masajes neutra', 1500, 5);
-lista_productos[3] = new productoEstetica('Locion anticeptica', 1000, 5);
+lista_productos.push(new productoEstetica(1, 'Crema para masajes neutra', 2000, 5)); //creacion de cada producto
+lista_productos.push(new productoEstetica(2, 'Aceite para masajes neutra', 1500, 5)); //creacion de cada producto
+lista_productos.push(new productoEstetica(3, 'Locion anticeptica', 1000, 5)); //creacion de cada producto
 
-let mensaje = `
-            <div nombre="${lista_productos[1].nombre}" precio="${lista_productos[1].precio}">  ${lista_productos[1].nombre} - $${lista_productos[1].precio} <input type="button" class="anadir_carro" value="Añadir"> </div>
-            <div nombre="${lista_productos[2].nombre}" precio="${lista_productos[2].precio}">  ${lista_productos[2].nombre} - $${lista_productos[2].precio} <input type="button" class="anadir_carro" value="Añadir">  </div>
-            <div nombre="${lista_productos[3].nombre}" precio="${lista_productos[3].precio}">  ${lista_productos[3].nombre} - $${lista_productos[3].precio} <input type="button" class="anadir_carro" value="Añadir">  </div>
-`;
-
-let compra = parseInt(prompt(mensaje));
-
-while(compra != 0){  
-      if (lista_productos[compra].comprado()) {
-            productos_comprados.push(compra);
-      }
-      compra = parseInt(prompt(mensaje));
+let mensaje = "";
+for (let producto of lista_productos) {
+      mensaje += "<div id="${producto.id}">  ${producto.nombre} - $${producto.precio} <input type="button" class="anadir_carro" value="Añadir"> </div> <br>"
 }
-
-
-let txt_productos_comprados = '';
-let precio_total = 0;
-for (const producto of productos_comprados) {
-      txt_productos_comprados += `${lista_productos[producto].nombre} - $${lista_productos[producto].precio}      
-            `;
-      precio_total += lista_productos[producto].precio;
-}
-
-let fecha = new Date;
-let recibo = `
-      ${fecha}
-      Usted realizo la compra de los siguientes productos:
-            ${txt_productos_comprados}   
-      Total a pagar: $${precio_total}         
-`;
-
-
-
-
 
 let parrafo_lista = document.getElementById("lista_productos");
-parrafo_lista.innerHTML = mensaje;
+parrafo_lista.innerHTML = mensaje; //se muestra la lista de producto en el html con cada boton
 
 
-let carro_productos = document.getElementById("carro_productos");
+
 
 
 let btn_anadir = parrafo_lista.querySelectorAll(".anadir_carro");
 btn_anadir.addEventListener("", );
 
-btn_anadir.forEach(btn => {
+
+btn_anadir.forEach(btn => { // cada vez que se añade un producto se lo añade al array productos_carro
       btn.addEventListener("click", function (){
-            
-      })
-      btn.parentNode.getAttribute("nombre");
-      btn.parentNode.getAttribute("precio");
+
+            let productos_carro_json = localStorage.getItem("productos_en_carro");// traigo del local sotage el arr.json
+            productos_carro = JSON.parse(productos_carro_json); //convierto a arr el .json
+
+            idproducto = btn.parentNode.getAttribute("id");
+            if (lista_productos[idproducto].verificarInventario(1)) {
+                  productos_carro.push(idproducto);
+
+                  productos_carro_json = JSON.stringify(productos_carro); // convierto a json el arr
+                  localStorage.setItem("productos_en_carro", productos_carro_json); // guardo en el localStorage al arr
+
+                  alert("producto añadido al carrito con exito");
+            }else{
+                  alert("sin inventario del producto seleccionado");
+            }
+      })      
 });
 
 
+let carro_productos = document.getElementById("carro_productos");
 
+
+
+
+
+//localStorage.removeItem("nombre_dato"); remover localStorage -------------------------
 

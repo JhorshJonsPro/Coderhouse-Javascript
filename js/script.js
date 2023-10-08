@@ -28,7 +28,7 @@ class productoEstetica{
 }
 
 let lista_productos = []; //listado de productos a mostrar
-localStorage.setItem("productos_en_carro", ""); // productos en localStorage
+
 
 lista_productos.push(new productoEstetica(0, 'Crema para masajes neutra', 2000, 5)); //creacion de cada producto
 lista_productos.push(new productoEstetica(1, 'Aceite para masajes neutra', 1500, 5)); //creacion de cada producto
@@ -43,7 +43,12 @@ let parrafo_lista = document.getElementById("lista_productos");
 parrafo_lista.innerHTML = mensaje; //se muestra la lista de producto en el html con cada boton
 
 
-
+arr_local = localStorage.getItem("productos_en_carro");
+if(arr_local == null){
+      localStorage.setItem("productos_en_carro", ""); // productos en localStorage
+}else{
+      actualizarCarro(lista_productos);
+}
 
 
 let btn_anadir = parrafo_lista.querySelectorAll(".anadir_carro");
@@ -119,6 +124,21 @@ function actualizarCarro(lista) {
 
 
 
+function fnNueva(){
+      let precio = 1;
+      let resultado = fetch("https://api.bluelytics.com.ar/v2/latest");
+      resultado 
+            .then(response => response.json())
+            .then(data => {
+                  precio = data.blue.value_buy
+                  let div_dolar = document.getElementById("dolar");
+                  div_dolar.innerHTML = `el valor del dolar blue es de $${precio}`;
+            })
+      
+      
+}
+
+setTimeout( fnNueva , 2000);
 
 
 

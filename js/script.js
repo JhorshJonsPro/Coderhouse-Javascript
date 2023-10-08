@@ -9,16 +9,18 @@ class productoEstetica{
       verificarInventario(cantidad){
             let inventario = this.inventario;
             let resultado = inventario - cantidad;
-            if (resultado >= 0) {
+            if (resultado > 0) {
+                  console.log(this.inventario);
                   return true
             } else {
                   return false
             }
       }
 
-      compraCarrito(cantidad){
+      comprarProducto(cantidad){
             if (this.inventario > 0) {
                   this.inventario -= cantidad;
+                  console.log(this.inventario);
                   return true
             } else {
                   return false
@@ -70,10 +72,35 @@ btn_anadir.forEach(btn => { // cada vez que se añade un producto se lo añade a
                   productos_carro_json = JSON.stringify(productos_carro); // convierto a json el arr
                   localStorage.setItem("productos_en_carro", productos_carro_json); // guardo en el localStorage al arr
 
-                  alert("producto añadido al carrito con exito");
+                  Toastify({
+                        text: `producto añadido al carrito con exito`,
+                        duration: 1800, //duracion en milisegundos
+                        gravity: "bottom", //eje Y, no se puede centro
+                        position: "left", //eje X, si permite en center
+                        style:{
+                              fontSize: "",
+                              fontoFamily: "",
+                              color: "",
+                              borderRadius:"",
+                              background: ""
+                        }
+                  }).showToast();
+                  lista_productos[idproducto].comprarProducto(1);
                   actualizarCarro(lista_productos);
             }else{
-                  alert("sin inventario del producto seleccionado");
+                  Toastify({
+                        text: `sin inventario del producto seleccionado`,
+                        duration: 1800, //duracion en milisegundos
+                        gravity: "bottom", //eje Y, no se puede centro
+                        position: "left", //eje X, si permite en center
+                        style:{
+                              fontSize: "",
+                              fontoFamily: "",
+                              color: "",
+                              borderRadius:"",
+                              background: ""
+                        }
+                  }).showToast();
             }
       })      
 });
@@ -102,21 +129,68 @@ function actualizarCarro(lista) {
                   idproducto = e.target.parentNode.getAttribute("idproducto");
                   let status = productos_carro.indexOf(idproducto);
                   if(status != -1){
-                        alert("en breve se elimina el producto");
+                        Toastify({
+                              text: `en breve se elimina el producto`,
+                              duration: 1800, //duracion en milisegundos
+                              gravity: "bottom", //eje Y, no se puede centro
+                              position: "left", //eje X, si permite en center
+                              style:{
+                                    fontSize: "",
+                                    fontoFamily: "",
+                                    color: "",
+                                    borderRadius:"",
+                                    background: ""
+                              }
+                        }).showToast();
                         if(productos_carro.splice(status, 1)){
                               console.log(productos_carro);
                               productos_carro_json = JSON.stringify(productos_carro); // convierto a json el arr
                               
                               localStorage.setItem("productos_en_carro", productos_carro_json);// guardo el json
-
-                              alert("producto eliminado del carrito");
+                              Toastify({
+                                    text: `producto eliminado del carrito`,
+                                    duration: 1800, //duracion en milisegundos
+                                    gravity: "bottom", //eje Y, no se puede centro
+                                    position: "left", //eje X, si permite en center
+                                    style:{
+                                          fontSize: "",
+                                          fontoFamily: "",
+                                          color: "",
+                                          borderRadius:"",
+                                          background: ""
+                                    }
+                              }).showToast();
                               e.target.parentNode.parentNode.removeChild(e.target.parentNode);
                         }else{
-                              alert("no se pudo eliminar el producto del carrito");
+                              Toastify({
+                                    text: `no se pudo eliminar el producto del carrito`,
+                                    duration: 1800, //duracion en milisegundos
+                                    gravity: "bottom", //eje Y, no se puede centro
+                                    position: "left", //eje X, si permite en center
+                                    style:{
+                                          fontSize: "",
+                                          fontoFamily: "",
+                                          color: "",
+                                          borderRadius:"",
+                                          background: ""
+                                    }
+                              }).showToast();
                         }
                         
                   }else{
-                        alert("el producto no existe en el carrito");
+                        Toastify({
+                              text: `el producto no existe en el carrito`,
+                              duration: 1800, //duracion en milisegundos
+                              gravity: "bottom", //eje Y, no se puede centro
+                              position: "left", //eje X, si permite en center
+                              style:{
+                                    fontSize: "",
+                                    fontoFamily: "",
+                                    color: "",
+                                    borderRadius:"",
+                                    background: ""
+                              }
+                        }).showToast();
                   }                  
             })      
       });
